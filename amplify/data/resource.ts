@@ -6,53 +6,55 @@ adding a new "isDone" field as a boolean. The authorization rule below
 specifies that any unauthenticated user can "create", "read", "update", 
 and "delete" any "Todo" records.
 =========================================================================*/
-const schema = a.schema({
-  User: a.model({
-    id: a.id().required(),
-    name: a.string().required(),
-    image: a.string(),
-    bio: a.string(),
-    username: a.string().required(),
-    email: a.email().required(),
-    website: a.url(),
-    nofPosts: a.integer().required(),
-    nofFollowers: a.integer().required(),
-    nofFollowings: a.integer().required(),
-    comments: a.hasMany("Comment", "userId"),
-    posts: a.hasMany("Post", "userId"),
-    likes: a.hasMany("Likes", "userId"),
-  }),
-  Post: a.model({
-    id: a.id().required(),
-    description: a.string(),
-    image: a.string(),
-    images: a.string().array().required(),
-    video: a.string(),
-    nofComments: a.integer().required(),
-    nofLikes: a.integer().required(),
-    userId: a.id(),
-    user: a.belongsTo("User", "userId"),
-    comments: a.hasMany("Comment", "postId"),
-    likes: a.hasMany("Likes", "postId"),
-  }),
-  Comment: a.model({
-    id: a.id().required(),
-    comment: a.string().required(),
-    userId: a.id(),
-    user: a.belongsTo("User", "userId"),
-    postId: a.id(),
-    post: a.belongsTo("Post", "postId"),
-  }),
-  Likes: a.model({
-    id: a.id().required(),
-    userId: a.id(),
-    user: a.belongsTo("User", "userId"),
-    postId: a.id(),
-    post: a.belongsTo("Post", "postId"),
-    commentId: a.id(),
-    comment: a.hasOne("Comment", "commentId"),
-  }),
-});
+const schema = a
+  .schema({
+    User: a.model({
+      id: a.id().required(),
+      name: a.string().required(),
+      image: a.string(),
+      bio: a.string(),
+      username: a.string().required(),
+      email: a.email().required(),
+      website: a.url(),
+      nofPosts: a.integer().required(),
+      nofFollowers: a.integer().required(),
+      nofFollowings: a.integer().required(),
+      comments: a.hasMany("Comment", "userId"),
+      posts: a.hasMany("Post", "userId"),
+      likes: a.hasMany("Likes", "userId"),
+    }),
+    Post: a.model({
+      id: a.id().required(),
+      description: a.string(),
+      image: a.string(),
+      images: a.string().array().required(),
+      video: a.string(),
+      nofComments: a.integer().required(),
+      nofLikes: a.integer().required(),
+      userId: a.id(),
+      user: a.belongsTo("User", "userId"),
+      comments: a.hasMany("Comment", "postId"),
+      likes: a.hasMany("Likes", "postId"),
+    }),
+    Comment: a.model({
+      id: a.id().required(),
+      comment: a.string().required(),
+      userId: a.id(),
+      user: a.belongsTo("User", "userId"),
+      postId: a.id(),
+      post: a.belongsTo("Post", "postId"),
+    }),
+    Likes: a.model({
+      id: a.id().required(),
+      userId: a.id(),
+      user: a.belongsTo("User", "userId"),
+      postId: a.id(),
+      post: a.belongsTo("Post", "postId"),
+      commentId: a.id(),
+      comment: a.hasOne("Comment", "commentId"),
+    }),
+  })
+  .authorization((allow) => [allow.owner()]);
 
 export type Schema = ClientSchema<typeof schema>;
 
