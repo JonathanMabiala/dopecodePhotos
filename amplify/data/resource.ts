@@ -55,7 +55,7 @@ const schema = a
       comment: a.belongsTo("Comment", "commentId"),
     }),
   })
-  .authorization((allow) => [allow.owner()]);
+  .authorization((allow) => [allow.authenticated()]);
 
 export type Schema = ClientSchema<typeof schema>;
 
