@@ -43,7 +43,7 @@ const schema = a
       user: a.belongsTo("User", "userId"),
       postId: a.id(),
       post: a.belongsTo("Post", "postId"),
-      like: a.belongsTo("Likes", "commentId"),
+      like: a.hasOne("Likes", "commentId"),
     }),
     Likes: a.model({
       id: a.id().required(),
@@ -52,7 +52,7 @@ const schema = a
       postId: a.id(),
       post: a.belongsTo("Post", "postId"),
       commentId: a.id(),
-      comment: a.hasOne("Comment", "commentId"),
+      comment: a.belongsTo("Comment", "commentId"),
     }),
   })
   .authorization((allow) => [allow.owner()]);
