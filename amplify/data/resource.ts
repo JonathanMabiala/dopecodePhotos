@@ -43,6 +43,7 @@ const schema = a
       user: a.belongsTo("User", "userId"),
       postId: a.id(),
       post: a.belongsTo("Post", "postId"),
+      like: a.belongsTo("Likes", "commentId"),
     }),
     Likes: a.model({
       id: a.id().required(),
