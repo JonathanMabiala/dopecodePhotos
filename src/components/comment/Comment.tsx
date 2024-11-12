@@ -1,31 +1,33 @@
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import fonts from '../../theme/fonts';
-import React, {useState} from 'react';
-import styles from './styles';
-import colors from '../../theme/colors';
-import {IComment} from '../../types/models';
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import fonts from "../../theme/fonts";
+import React, { useState } from "react";
+import styles from "./styles";
+import colors from "../../theme/colors";
+import { IComment } from "../../types/models";
+import { Schema } from "../../../amplify/data/resource";
 
+type Comment = Schema["Comment"]["type"];
 interface IcommentProps {
-  comment: IComment;
+  comment: Comment;
   includeDetails: boolean;
 }
-const Comment = ({comment, includeDetails = false}: IcommentProps) => {
+const Comment = ({ comment, includeDetails = false }: IcommentProps) => {
   const [isLiked, setIsLiked] = useState(false);
 
   const toggleLike = () => {
-    setIsLiked(v => !v);
+    setIsLiked((v) => !v);
   };
 
   return (
     <View style={styles.comment}>
       {includeDetails && (
-        <Image source={{uri: comment.user.image}} style={styles.avatar} />
+        <Image source={{ uri: comment.user?.image }} style={styles.avatar} />
       )}
       <View style={styles.middleColumn}>
         <Text style={styles.commentText}>
-          <Text style={{fontWeight: fonts.weight.bold}}>
-            {' '}
+          <Text style={{ fontWeight: fonts.weight.bold }}>
+            {" "}
             {comment.user.username}
           </Text>
           {comment.comment}
@@ -40,7 +42,7 @@ const Comment = ({comment, includeDetails = false}: IcommentProps) => {
       </View>
       <Pressable onPress={toggleLike} hitSlop={5}>
         <AntDesign
-          name={isLiked ? 'heart' : 'hearto'}
+          name={isLiked ? "heart" : "hearto"}
           style={styles.icon}
           color={isLiked ? colors.accent : colors.black}
         />

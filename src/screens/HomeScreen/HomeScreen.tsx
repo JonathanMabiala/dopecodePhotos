@@ -4,22 +4,44 @@ import {
   View,
   ViewabilityConfig,
   ViewToken,
+  ActivityIndicator,
 } from "react-native";
-import FeedPost from "../../components/FeedPost";
-import posts from "../../assets/data/posts.json";
 import { useState, useRef, useEffect } from "react";
 import { generateClient } from "aws-amplify/data";
 import { type Schema } from "../../../amplify/data/resource";
+import FeedPost from "../../components/FeedPost";
 
 const client = generateClient<Schema>();
 const HomeScreen = () => {
+  type Post = Schema["Post"]["type"];
+
   const [activePostId, setActivePostId] = useState<string | null>(null);
+  const [posts, setPosts] = useState<Post[]>();
 
   useEffect(() => {
     const listPost = async () => {
-      const { data: posts, errors } = await client.models.Post.list();
+      const { data: postsFetched, errors } = await client.models.Post.list({
+        selectionSet: [
+          "description",
+          "user.*",
+          "video",
+          "id",
+          "nofComments",
+          "nofLikes",
+          "images",
+          "image",
+          "createdAt",
+          "comments.comment",
+          "comments.id",
+          "comments.user.id",
+          "comments.user.image",
+          "comments.user.username",
+          "user.*",
+        ],
+      });
       if (!errors) {
-        console.log("List of posts ", posts);
+        setPosts(postsFetched);
+        console.log("List of posts ", postsFetched);
       } else {
         console.log("There was an error ", errors);
       }
@@ -38,7 +60,7 @@ const HomeScreen = () => {
       }
     }
   );
-  return (
+  return posts ? (
     <View>
       <FlatList
         data={posts}
@@ -50,6 +72,8 @@ const HomeScreen = () => {
         onViewableItemsChanged={onViewableItemsChanged.current}
       />
     </View>
+  ) : (
+    <ActivityIndicator />
   );
 };
 
