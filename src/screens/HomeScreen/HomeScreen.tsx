@@ -41,7 +41,6 @@ const HomeScreen = () => {
       });
       if (!errors) {
         setPosts(postsFetched);
-        console.log("List of posts ", postsFetched);
       } else {
         console.log("There was an error ", errors);
       }
