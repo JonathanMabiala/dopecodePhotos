@@ -1,5 +1,5 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
-
+import { postConfirmation } from "../auth/post-confirmation/resource";
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
 adding a new "isDone" field as a boolean. The authorization rule below
@@ -8,21 +8,23 @@ and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a
   .schema({
-    User: a.model({
-      id: a.id().required(),
-      name: a.string().required(),
-      image: a.string(),
-      bio: a.string(),
-      username: a.string().required(),
-      email: a.email().required(),
-      website: a.url(),
-      nofPosts: a.integer().required(),
-      nofFollowers: a.integer().required(),
-      nofFollowings: a.integer().required(),
-      comments: a.hasMany("Comment", "userId"),
-      posts: a.hasMany("Post", "userId"),
-      likes: a.hasMany("Likes", "userId"),
-    }),
+    User: a
+      .model({
+        id: a.id().required(),
+        name: a.string().required(),
+        image: a.string(),
+        bio: a.string(),
+        username: a.string().required(),
+        email: a.email().required(),
+        website: a.url(),
+        nofPosts: a.integer().required(),
+        nofFollowers: a.integer().required(),
+        nofFollowings: a.integer().required(),
+        comments: a.hasMany("Comment", "userId"),
+        posts: a.hasMany("Post", "userId"),
+        likes: a.hasMany("Likes", "userId"),
+      })
+      .authorization((allow) => [allow.ownerDefinedIn("id")]),
     Post: a.model({
       id: a.id().required(),
       description: a.string(),
@@ -57,6 +59,7 @@ const schema = a
   })
   .authorization((allow) => [
     allow.authenticated().to(["read", "create", "update", "delete"]),
+    allow.resource(postConfirmation),
   ]);
 
 export type Schema = ClientSchema<typeof schema>;

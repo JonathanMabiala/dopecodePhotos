@@ -46,7 +46,7 @@ const HomeScreen = () => {
         console.log("There was an error ", errors);
       }
     };
-    listPost();
+    //listPost();
   }, []);
 
   const viewabilityConfig: ViewabilityConfig = {
