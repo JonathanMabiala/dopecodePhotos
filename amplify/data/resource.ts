@@ -8,23 +8,21 @@ and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a
   .schema({
-    User: a
-      .model({
-        id: a.id().required(),
-        name: a.string().required(),
-        image: a.string(),
-        bio: a.string(),
-        username: a.string().required(),
-        email: a.email().required(),
-        website: a.url(),
-        nofPosts: a.integer().required(),
-        nofFollowers: a.integer().required(),
-        nofFollowings: a.integer().required(),
-        comments: a.hasMany("Comment", "userId"),
-        posts: a.hasMany("Post", "userId"),
-        likes: a.hasMany("Likes", "userId"),
-      })
-      .authorization((allow) => [allow.ownerDefinedIn("id")]),
+    User: a.model({
+      id: a.id().required(),
+      name: a.string().required(),
+      image: a.string(),
+      bio: a.string(),
+      username: a.string().required(),
+      email: a.email().required(),
+      website: a.url(),
+      nofPosts: a.integer().required(),
+      nofFollowers: a.integer().required(),
+      nofFollowings: a.integer().required(),
+      comments: a.hasMany("Comment", "userId"),
+      posts: a.hasMany("Post", "userId"),
+      likes: a.hasMany("Likes", "userId"),
+    }),
     Post: a.model({
       id: a.id().required(),
       description: a.string(),
