@@ -1,4 +1,5 @@
 import { defineAuth, secret } from "@aws-amplify/backend";
+import { postConfirmation } from "./post-confirmation/resource";
 
 /**
  * Define and configure your auth resource
@@ -22,5 +23,8 @@ export const auth = defineAuth({
       callbackUrls: ["dopecodephotos://"],
       logoutUrls: ["dopecodephotos://"],
     },
+  },
+  triggers: {
+    postConfirmation,
   },
 });
